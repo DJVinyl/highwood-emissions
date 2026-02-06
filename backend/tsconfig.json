@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "lib": ["es2021"],
+    "target": "es2021",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "useUnknownInCatchVariables": false,
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    "baseUrl": ".",
+    "typeRoots": ["src/types", "node_modules/@types"],
+    "paths": {
+      "*": ["*", "node_modules/*", "src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/__mocks__/**"]
+}
