@@ -1,24 +1,7 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
+import 'dotenv/config';
+import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-export const createPostGresDataSource = async (): Promise<DataSource> => {
-  //TODO: Need Replacement in all environments
-  const postgresOptions: DataSourceOptions = {
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'root',
-    password: 'test',
-    database: 'regig',
-    synchronize: true, // Should be turned off in prod?
-    logging: true, // Should turn off in prod?
-    // entities: [User],
-    migrations: [],
-    subscribers: [],
-  };
-
-  const postGresDataSource = new DataSource(postgresOptions);
-
-  const database = await postGresDataSource.initialize();
-
-  return database;
+export const createPostGresDataSource = async (): Promise<NodePgDatabase> => {
+  const db = drizzle(process.env.DATABASE_URL!);
+  return db;
 };

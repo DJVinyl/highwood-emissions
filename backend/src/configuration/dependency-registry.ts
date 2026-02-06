@@ -1,24 +1,19 @@
 import { Container, interfaces } from 'inversify';
 import { TestRouteController } from '../api/http/test-route-controller';
-import { DataSource } from 'typeorm';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 class DependencyRegistry {
   private container: Container;
-  private database: DataSource;
+  private database: NodePgDatabase;
 
-  constructor(database: DataSource) {
+  constructor(database: NodePgDatabase) {
     this.container = new Container();
     this.database = database;
 
     //HTTP Controllers
-    //THis is most likely going to be only the database layer. This is a test route
-    this.registerSingletonWithConstructor(TestRouteController, () => new TestRouteController(this.database));
-
+    this.registerSingletonWithConstructor(TestRouteController, () => new TestRouteController());
 
     //Providers
-
-
-
 
     //Consumers
 
@@ -31,7 +26,7 @@ class DependencyRegistry {
 
   public registerSingletonWithConstructor<T>(
     provider: interfaces.ServiceIdentifier<T>,
-    dynamicValue: interfaces.DynamicValue<T>
+    dynamicValue: interfaces.DynamicValue<T>,
   ): void {
     this.container.bind<T>(provider).toDynamicValue(dynamicValue).inSingletonScope();
   }
@@ -40,7 +35,7 @@ class DependencyRegistry {
     this.container.bind<T>(provider).toSelf().inSingletonScope();
   }
 
-  public getDatabase(): DataSource {
+  public getDatabase(): NodePgDatabase {
     return this.database;
   }
 }

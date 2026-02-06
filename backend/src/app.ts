@@ -3,9 +3,13 @@ import fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { DependencyRegistry } from './configuration/dependency-registry';
 import { getRoutes } from './configuration/routes';
-import { DataSource } from 'typeorm';
+import 'dotenv/config';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-const createApp = async (dependencyRegistry: DependencyRegistry, database: DataSource): Promise<FastifyInstance> => {
+const createApp = async (
+  dependencyRegistry: DependencyRegistry,
+  database: NodePgDatabase,
+): Promise<FastifyInstance> => {
   const app: FastifyInstance = fastify({
     requestIdHeader: 'x-request-id',
     genReqId: () => uuid(),

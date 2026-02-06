@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-import { DataSource } from 'typeorm';
 
 @injectable()
 class TestRouteController {
