@@ -24,6 +24,31 @@ export const getRoutes = (dependencyRegistry: DependencyRegistry): RouteOptions[
         return reply.status(200).send(message);
       },
     },
+
+    {
+      method: HTTP_METHOD.POST,
+      url: '/v1/sites',
+      handler: (request: any, reply: any) => {
+        console.log('sites route');
+        return reply.status(200).send();
+      },
+    },
+    {
+      method: HTTP_METHOD.POST,
+      url: '/v1/ingest',
+      handler: (request: any, reply: any) => {
+        console.log('ingest route');
+        return reply.status(200).send();
+      },
+    },
+    {
+      method: HTTP_METHOD.GET,
+      url: '/v1/sites/:id/metrics',
+      handler: (request: any, reply: any) => {
+        console.log('sites/:id/metrics', `id: ${request.params.id}`);
+        return reply.status(200).send();
+      },
+    },
   ];
 
   return routes;

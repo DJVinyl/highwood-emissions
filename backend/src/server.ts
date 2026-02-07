@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-// import { config as dotenvConfig } from 'dotenv';
+import { config as dotenvConfig } from 'dotenv';
 
 import createApp from './app';
 import { DependencyRegistry } from './configuration/dependency-registry';
@@ -8,7 +8,7 @@ import { createPostGresDataSource } from './configuration/database';
 const PORT = process.env.NODE_ENV === 'production' ? 8080 : 4000;
 
 (async () => {
-  // dotenvConfig();
+  dotenvConfig();
 
   const dataSource = await createPostGresDataSource();
   const dependencyRegistry = new DependencyRegistry(dataSource);
