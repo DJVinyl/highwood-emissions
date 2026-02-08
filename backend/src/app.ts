@@ -1,10 +1,17 @@
+import 'dotenv/config';
 import { v4 as uuid } from 'uuid';
-import fastify, { FastifyInstance } from 'fastify';
+import fastify, { FastifyError, FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import { ZodError } from 'zod';
+
 import { DependencyRegistry } from './configuration/dependency-registry';
 import { getRoutes } from './configuration/routes';
-import 'dotenv/config';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+
+export function isZodError(error: any): error is ZodError {
+  return error instanceof ZodError || error.name === 'ZodError';
+}
 
 const createApp = async (
   dependencyRegistry: DependencyRegistry,
@@ -23,8 +30,30 @@ const createApp = async (
 
   app.decorate('db', database);
 
-  const routes = getRoutes(dependencyRegistry);
+  app.setErrorHandler((error: FastifyError, request, reply) => {
+    if (isZodError(error)) {
+      return reply.status(400).send({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: 'Validation Error',
+        issues: error.issues.map((issue) => ({
+          path: issue.path.join('.'),
+          message: issue.message,
+          code: issue.code,
+        })),
+      });
+    }
 
+    return reply.status(error.statusCode || 500).send({
+      statusCode: error.statusCode || 500,
+      message: error.message || 'Internal Server Error',
+    });
+  });
+
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+
+  const routes = getRoutes(dependencyRegistry);
   for (const route of routes) {
     app.route(route);
   }

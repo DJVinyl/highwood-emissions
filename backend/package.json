@@ -17,6 +17,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@fastify/cors": "^10.0.2",
+    "@highwood/shared": "*",
     "dotenv": "^16.6.1",
     "drizzle-orm": "^0.45.1",
     "fastify": "^5.2.1",
@@ -24,7 +25,8 @@
     "pg": "^8.18.0",
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
-    "uuid": "^11.0.5"
+    "uuid": "^11.0.5",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^22.10.10",

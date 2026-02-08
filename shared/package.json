@@ -1,0 +1,12 @@
+{
+    "name": "@highwood/shared",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [],
+    "author": "",
+    "main": "./zod/index.ts",
+    "types": "./zod/index.ts",
+    "dependencies": {
+        "zod": "^3.22.0"
+    }
+}

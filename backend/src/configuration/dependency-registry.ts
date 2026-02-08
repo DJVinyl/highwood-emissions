@@ -1,6 +1,9 @@
 import { Container, interfaces } from 'inversify';
 import { TestRouteController } from '../api/http/test-route-controller';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { SitesRouteController } from '../api/http/sites-route.controller';
+import { SitesProvider } from '../domain/providers/sites.provider';
+import { SitesRepository } from '../repository/sites.repository';
 
 class DependencyRegistry {
   private container: Container;
@@ -10,14 +13,27 @@ class DependencyRegistry {
     this.container = new Container();
     this.database = database;
 
+    // ----------------------------------
     //HTTP Controllers
+    // ----------------------------------
     this.registerSingletonWithConstructor(TestRouteController, () => new TestRouteController());
-
+    this.registerSingleton(SitesRouteController);
+    // ----------------------------------
+    // ----------------------------------
     //Providers
-
+    // ----------------------------------
+    this.registerSingleton(SitesProvider);
+    // ----------------------------------
+    // ----------------------------------
+    //Repository
+    // ----------------------------------
+    this.registerSingletonWithConstructor(SitesRepository, () => new SitesRepository(this.database));
+    // ----------------------------------
     //Consumers
-
+    // ----------------------------------
+    // ----------------------------------
     //Producers
+    // ----------------------------------
   }
 
   public resolve<T>(constructorFunction: interfaces.Newable<T>): T {
