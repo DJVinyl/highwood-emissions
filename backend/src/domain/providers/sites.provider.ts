@@ -7,7 +7,7 @@ class SitesProvider {
   constructor(@inject(SitesRepository) private sitesRepository: SitesRepository) {}
 
   public async createIndustrialSite(site: Site) {
-    return await this.sitesRepository.createIndustrialSite(site);
+    return this.sitesRepository.createIndustrialSite(site);
   }
 }
 

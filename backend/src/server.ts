@@ -12,7 +12,6 @@ const PORT = process.env.NODE_ENV === 'production' ? 8080 : 4000;
 
   const dataSource = await createPostGresDataSource();
   const dependencyRegistry = new DependencyRegistry(dataSource);
-
   const database = dependencyRegistry.getDatabase();
 
   const app = await createApp(dependencyRegistry, database);
@@ -24,5 +23,3 @@ const PORT = process.env.NODE_ENV === 'production' ? 8080 : 4000;
     }
   });
 })();
-
-// TODO: Add an exitHook

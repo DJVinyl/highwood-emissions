@@ -1,10 +1,11 @@
 import { RouteOptions } from 'fastify';
+import { siteSchema } from '@highwood/shared';
 
 import { DependencyRegistry } from './dependency-registry';
 import { TestRouteController } from '../api/http/test-route-controller';
 import { SitesRouteController } from '../api/http/sites-route.controller';
 
-import { siteSchema } from '@highwood/shared';
+import { asyncLogger as logger } from '../lib/logger';
 
 enum HTTP_METHOD {
   GET = 'GET',
@@ -31,17 +32,17 @@ export const getRoutes = (dependencyRegistry: DependencyRegistry): RouteOptions[
     {
       method: HTTP_METHOD.POST,
       url: '/v1/sites',
-      handler: (request: any, reply: any) => {
-        console.log('sites route', request.body);
+      handler: async (request: any, reply: any) => {
+        logger.info({ requestBody: request.body }, 'Create a Site');
         const validation = siteSchema.safeParse(request.body);
 
         if (!validation.success) {
           throw validation.error;
         }
 
-        // const result = dependencyRegistry.resolve(SitesRouteController).createIndustrialSite(request.body);
+        const result = await dependencyRegistry.resolve(SitesRouteController).createIndustrialSite(request.body);
 
-        return reply.status(200).send();
+        return reply.status(200).send(result);
       },
     },
     {
