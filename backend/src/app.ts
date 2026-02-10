@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid';
 import fastify, { FastifyError, FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { ZodError } from 'zod';
 
 import { DependencyRegistry } from './configuration/dependency-registry';
@@ -49,9 +48,6 @@ const createApp = async (
       message: error.message || 'Internal Server Error',
     });
   });
-
-  app.setValidatorCompiler(validatorCompiler);
-  app.setSerializerCompiler(serializerCompiler);
 
   const routes = getRoutes(dependencyRegistry);
   for (const route of routes) {

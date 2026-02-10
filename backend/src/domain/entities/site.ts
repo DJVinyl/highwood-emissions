@@ -15,4 +15,5 @@ export type Site = {
   totalEmissionsToDate: number;
   siteType: SiteType;
   coordinates: Coordinate;
+  isCompliant: boolean;
 };

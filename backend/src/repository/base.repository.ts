@@ -11,6 +11,10 @@ abstract class BaseRepository<T extends PgTableWithColumns<any>> {
   async insert(data: InferInsertModel<T>) {
     return this.db.insert(this.table).values(data).returning();
   }
+
+  async findOne() {}
+
+  async findMany() {}
 }
 
 export { BaseRepository };

@@ -3,7 +3,7 @@ import { siteSchema } from '@highwood/shared';
 
 import { DependencyRegistry } from './dependency-registry';
 import { TestRouteController } from '../api/http/test-route-controller';
-import { SitesRouteController } from '../api/http/sites-route.controller';
+import { SiteRouteController } from '../api/http/site-route.controller';
 
 import { asyncLogger as logger } from '../lib/logger';
 
@@ -40,7 +40,7 @@ export const getRoutes = (dependencyRegistry: DependencyRegistry): RouteOptions[
           throw validation.error;
         }
 
-        const result = await dependencyRegistry.resolve(SitesRouteController).createIndustrialSite(request.body);
+        const result = await dependencyRegistry.resolve(SiteRouteController).createIndustrialSite(request.body);
 
         return reply.status(200).send(result);
       },

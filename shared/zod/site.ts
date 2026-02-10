@@ -1,11 +1,17 @@
 import { z } from 'zod';
 
-//TODO: Figure out if I want to share entities or not when frontend is developed.
 export enum SiteType {
   WELL = 'WELL',
   PROCESSING_PLANT = 'PROCESSING_PLANT',
   REFINERY = 'REFINERY',
 }
+
+//TODO: Figure out if I want to share entities or not when frontend is developed.
+// Starting to think we repeat here because this is the API Layer.
+// There may be calculated fields in the domain of the site but may not necessarily
+// be required from an api standpoint from FE to BE
+// Still need to see it action
+// example is calculated field isCompliant and id...
 
 export const siteSchema = z.object({
   name: z.string(),

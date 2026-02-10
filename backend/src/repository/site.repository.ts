@@ -1,12 +1,13 @@
 import { injectable } from 'inversify';
-
+import { eq, sql } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { sitesTable, SitesTable } from './schema/sites.schema';
+
+import { sitesTable, SitesTable } from './schema/site.schema';
 import { Site } from '../domain/entities/site';
-import { BaseRepository } from './base-repository';
+import { BaseRepository } from './base.repository';
 
 @injectable()
-class SitesRepository extends BaseRepository<SitesTable> {
+class SiteRepository extends BaseRepository<SitesTable> {
   constructor(db: NodePgDatabase) {
     super(db, sitesTable);
   }
@@ -21,10 +22,20 @@ class SitesRepository extends BaseRepository<SitesTable> {
         latitude: site.coordinates.latitude,
         longitude: site.coordinates.longitude,
       },
+      isCompliant: site.isCompliant,
     };
 
     return this.insert(dataToInsert);
   }
+
+  public async incrementTotalEmissions(siteId: string, amount: number, trx: NodePgDatabase) {
+    return await trx
+      .update(sitesTable)
+      .set({
+        totalEmissionsToDate: sql`${sitesTable.totalEmissionsToDate} + ${amount}`,
+      })
+      .where(eq(sitesTable.id, siteId));
+  }
 }
 
-export { SitesRepository };
+export { SiteRepository };
