@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { eq, sql } from 'drizzle-orm';
+import { eq, InferSelectModel, sql } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { sitesTable, SitesTable } from './schema/site.schema';
@@ -7,25 +7,9 @@ import { Site } from '../domain/entities/site';
 import { BaseRepository } from './base.repository';
 
 @injectable()
-class SiteRepository extends BaseRepository<SitesTable> {
+class SiteRepository extends BaseRepository<SitesTable, Site> {
   constructor(db: NodePgDatabase) {
     super(db, sitesTable);
-  }
-
-  public async createIndustrialSite(site: Site) {
-    const dataToInsert = {
-      name: site.name,
-      emissionLimit: site.emissionLimit,
-      totalEmissionsToDate: site.totalEmissionsToDate,
-      siteType: site.siteType,
-      location: {
-        latitude: site.coordinates.latitude,
-        longitude: site.coordinates.longitude,
-      },
-      isCompliant: site.isCompliant,
-    };
-
-    return this.insert(dataToInsert);
   }
 
   public async incrementTotalEmissions(siteId: string, amount: number, trx: NodePgDatabase) {
@@ -35,6 +19,18 @@ class SiteRepository extends BaseRepository<SitesTable> {
         totalEmissionsToDate: sql`${sitesTable.totalEmissionsToDate} + ${amount}`,
       })
       .where(eq(sitesTable.id, siteId));
+  }
+
+  protected toDomain(row: InferSelectModel<SitesTable>): Site {
+    return {
+      id: row.id,
+      name: row.name,
+      emissionLimit: row.emissionLimit,
+      totalEmissionsToDate: row.totalEmissionsToDate,
+      siteType: row.siteType,
+      coordinates: row.coordinates,
+      isCompliant: row.isCompliant,
+    };
   }
 }
 

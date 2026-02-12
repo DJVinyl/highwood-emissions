@@ -9,9 +9,9 @@ const sitesTable = pgTable('sites', {
   name: varchar('name', { length: 255 }).notNull(),
   siteType: siteType('site_type').notNull(),
   emissionLimit: real('emission_limit').notNull(),
-  totalEmissionsToDate: real('total_emissions_to_date').default(0),
-  location: jsonb('location').$type<Coordinate>(),
-  isCompliant: boolean('is_compliant').default(true),
+  totalEmissionsToDate: real('total_emissions_to_date').notNull().default(0),
+  coordinates: jsonb('coordinates').$type<Coordinate>().notNull(),
+  isCompliant: boolean('is_compliant').notNull().default(true),
 
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),

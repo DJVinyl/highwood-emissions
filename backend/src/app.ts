@@ -6,7 +6,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { ZodError } from 'zod';
 
 import { DependencyRegistry } from './configuration/dependency-registry';
-import { getRoutes } from './configuration/routes';
+import { getRoutes } from './api/http/routes';
 
 export function isZodError(error: any): error is ZodError {
   return error instanceof ZodError || error.name === 'ZodError';

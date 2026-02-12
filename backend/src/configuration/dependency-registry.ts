@@ -1,9 +1,13 @@
 import { Container, interfaces } from 'inversify';
-import { TestRouteController } from '../api/http/test-route-controller';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { SiteRouteController } from '../api/http/site-route.controller';
+
+import { SiteController } from '../api/http/site.controller';
 import { SiteProvider } from '../domain/providers/site.provider';
 import { SiteRepository } from '../repository/site.repository';
+import { IngestController } from '../api/http/ingest.controller';
+import { IngestProvider } from '../domain/providers/ingest.provider';
+import { MeasurementRepository } from '../repository/measurement.repository';
+import { CommandRepository } from '../repository/command.repository';
 
 class DependencyRegistry {
   private container: Container;
@@ -16,18 +20,24 @@ class DependencyRegistry {
     // ----------------------------------
     //HTTP Controllers
     // ----------------------------------
-    this.registerSingletonWithConstructor(TestRouteController, () => new TestRouteController());
-    this.registerSingleton(SiteRouteController);
+    this.registerSingleton(SiteController);
+    this.registerSingleton(IngestController);
     // ----------------------------------
     // ----------------------------------
     //Providers
     // ----------------------------------
     this.registerSingleton(SiteProvider);
+    this.registerSingleton(IngestProvider);
     // ----------------------------------
     // ----------------------------------
     //Repository
     // ----------------------------------
     this.registerSingletonWithConstructor(SiteRepository, () => new SiteRepository(this.database));
+    this.registerSingletonWithConstructor(
+      MeasurementRepository,
+      () => new MeasurementRepository(this.database, this.container.get(SiteRepository)),
+    );
+    this.registerSingletonWithConstructor(CommandRepository, () => new CommandRepository(this.database));
     // ----------------------------------
     //Consumers
     // ----------------------------------

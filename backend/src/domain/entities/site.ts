@@ -10,6 +10,7 @@ export type Coordinate = {
 };
 
 export type Site = {
+  id: string;
   name: string;
   emissionLimit: number;
   totalEmissionsToDate: number;
@@ -17,3 +18,5 @@ export type Site = {
   coordinates: Coordinate;
   isCompliant: boolean;
 };
+
+export type CreateSite = Omit<Site, 'id' | 'isCompliant'>;
