@@ -4,9 +4,9 @@
   "description": "",
   "keywords": [],
   "author": "",
-  "main": "./zod/index.ts",
-  "types": "./zod/index.ts",
-  "dependencies": {
-    "zod": "^3.22.0"
+  "main": "./zod/schema/index.ts",
+  "types": "./zod/schema/index.ts",
+  "peerDependencies": {
+    "zod": "^4.3.6"
   }
 }

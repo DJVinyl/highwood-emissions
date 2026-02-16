@@ -1,9 +1,9 @@
 import { injectable } from 'inversify';
 import { eq, InferSelectModel, sql } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { Site } from '@highwood/shared';
 
 import { sitesTable, SitesTable } from './schema/site.schema';
-import { Site } from '../domain/entities/site';
 import { BaseRepository } from './base.repository';
 
 @injectable()

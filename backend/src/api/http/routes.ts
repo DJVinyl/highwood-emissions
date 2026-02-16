@@ -19,6 +19,15 @@ export const getRoutes = (dependencyRegistry: DependencyRegistry): RouteOptions[
       },
     },
     {
+      method: HTTP_METHOD.GET,
+      url: '/v1/sites',
+      handler: async (request: any, reply: any) => {
+        const result = await dependencyRegistry.resolve(SiteController).getSites();
+
+        return reply.status(200).send(result);
+      },
+    },
+    {
       method: HTTP_METHOD.POST,
       url: '/v1/sites',
       handler: async (request: any, reply: any) => {

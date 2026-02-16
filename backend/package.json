@@ -12,7 +12,9 @@
     "build": "tsc -p tsconfig.json",
     "start:production": "NODE_ENV=production ts-node-dev --no-notify --inspect=:9225 src/server.ts",
     "start:local": "NODE_ENV=local ts-node-dev --no-notify --inspect=:9225 src/server.ts",
-    "test": "NODE_ENV=test jest --passWithNoTests"
+    "test": "NODE_ENV=test jest --passWithNoTests",
+    "db:seed": "tsx --env-file=.env scripts/seed-db.ts",
+    "db:reset": "tsx --env-file=.env scripts/reset-db.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +34,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.10",
     "@types/pg": "^8.16.0",

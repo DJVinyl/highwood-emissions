@@ -1,7 +1,9 @@
+import { CreateMeasurement } from '@highwood/shared';
+
 import { CommandInterface } from '../../lib/command-interface';
+import { ErrorCode, HighwoodError } from '../../lib/highwood-error';
 import { CommandRepository } from '../../repository/command.repository';
 import { MeasurementRepository } from '../../repository/measurement.repository';
-import { CreateMeasurement } from '../entities/measurement';
 
 class IngestMeasurementBulkCommand implements CommandInterface<CreateMeasurement[]> {
   constructor(
@@ -10,7 +12,7 @@ class IngestMeasurementBulkCommand implements CommandInterface<CreateMeasurement
   ) {}
 
   async execute(measurements: CreateMeasurement[]): Promise<void> {
-    //would be tight af to call a queue.
+    //would be tight af to call a queue(RabbitMQ, SQS/SNS).
     //alas, time constraints
 
     const startTime = new Date();
@@ -42,16 +44,19 @@ class IngestMeasurementBulkCommand implements CommandInterface<CreateMeasurement
 
     const endTime = new Date();
 
-    await this.commandRepository.insert({
-      commandName: 'IngestMeasurementBulkCommand',
-      startedAt: startTime,
-      endedAt: endTime,
-      metadata: {
-        upperBound: highestKey,
-        lowerBound: lowestKey,
-      },
-    });
-
+    try {
+      await this.commandRepository.insert({
+        commandName: 'IngestMeasurementBulkCommand',
+        startedAt: startTime,
+        endedAt: endTime,
+        metadata: {
+          upperBound: highestKey,
+          lowerBound: lowestKey,
+        },
+      });
+    } catch (error) {
+      throw new HighwoodError(ErrorCode.DATABASE_ERROR, 'error insert command into database', error);
+    }
     return;
   }
 }

@@ -1,13 +1,16 @@
 {
-    "name": "highwood-emissions-monorepo",
-    "version": "1.0.0",
-    "description": "",
-    "private": true,
-    "workspaces": [
-        "backend",
-        "shared"
-    ],
-    "keywords": [],
-    "author": "",
-    "license": "UNLICENSED"
+  "name": "highwood-emissions-monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "shared"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
 }

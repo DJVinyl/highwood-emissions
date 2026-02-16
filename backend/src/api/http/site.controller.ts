@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { createSiteSchema, uuidSchema } from '@highwood/shared';
+import { createSiteSchema, uuidSchema, CreateSite } from '@highwood/shared';
 import { FastifyRequest } from 'fastify';
 
 import { SiteProvider } from '../../domain/providers/site.provider';
@@ -16,10 +16,29 @@ interface FastifyRequestToGetSite extends FastifyRequest {
 class SiteController {
   constructor(@inject(SiteProvider) private siteProvider: SiteProvider) {}
 
-  public async createSite(request: FastifyRequest) {
-    logger.info({ createSite: request.body }, 'RouteHandler.siteRoute');
+  public async getSites() {
+    logger.info('SiteController.getSites');
 
-    const validatedSite = validate(createSiteSchema, request.body);
+    const result = await this.siteProvider.getSites();
+
+    return result;
+  }
+
+  public async createSite(request: FastifyRequest) {
+    logger.info({ createSite: request.body }, 'SiteController.createSite');
+
+    const createSite = request.body as CreateSite;
+
+    const validatedSite = validate(createSiteSchema, {
+      name: createSite.name,
+      emissionLimit: createSite.emissionLimit,
+      totalEmissionsToDate: createSite.totalEmissionsToDate,
+      siteType: createSite.siteType,
+      coordinates: {
+        latitude: createSite.coordinates.latitude,
+        longitude: createSite.coordinates.longitude,
+      },
+    });
 
     const result = await this.siteProvider.createSite(validatedSite);
 
@@ -27,7 +46,7 @@ class SiteController {
   }
 
   public async getSiteMetrics(request: FastifyRequestToGetSite) {
-    logger.info({ siteId: request.params.id }, 'SiteController.getSite');
+    logger.info({ siteId: request.params.id }, 'SiteController.getSiteMetrics');
 
     const siteId = validate(uuidSchema, request.params.id);
 

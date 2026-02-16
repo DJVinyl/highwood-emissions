@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, jsonb, timestamp, real, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, jsonb, timestamp } from 'drizzle-orm/pg-core';
 
 const commandTable = pgTable('commands', {
   id: uuid('id').defaultRandom().primaryKey(),

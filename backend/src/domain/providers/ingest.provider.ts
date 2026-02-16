@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
+import { CreateMeasurement } from '@highwood/shared';
 
 import { MeasurementRepository } from '../../repository/measurement.repository';
-import { CreateMeasurement } from '../entities/measurement';
 import { IngestMeasurementBulkCommand } from '../commands/ingest-measurement-command';
 import { CommandRepository } from '../../repository/command.repository';
 import { asyncLogger as logger } from '../../lib/logger';
@@ -14,6 +14,8 @@ class IngestProvider {
   ) {}
 
   public async ingestBulkMeasurements(measurements: CreateMeasurement[]): Promise<boolean> {
+    logger.info({ measurements }, 'IngestProvider.ingestBulkMeasurements');
+
     if (!measurements || measurements.length === 0) {
       return true;
     }

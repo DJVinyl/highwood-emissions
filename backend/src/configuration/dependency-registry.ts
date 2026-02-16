@@ -66,14 +66,4 @@ class DependencyRegistry {
   }
 }
 
-// const dependencyRegistry = new DependencyRegistry();
-
-// const getDependencyRegistryInstance = (): DependencyRegistry => {
-//   if (!dependencyRegistry) {
-//     return new DependencyRegistry();
-//   }
-
-//   return dependencyRegistry;
-// };
-
 export { DependencyRegistry };

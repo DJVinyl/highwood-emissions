@@ -7,9 +7,14 @@ import { ZodError } from 'zod';
 
 import { DependencyRegistry } from './configuration/dependency-registry';
 import { getRoutes } from './api/http/routes';
+import { HighwoodError } from './lib/highwood-error';
 
 export function isZodError(error: any): error is ZodError {
   return error instanceof ZodError || error.name === 'ZodError';
+}
+
+export function isHighwoodError(error: any): error is HighwoodError {
+  return error instanceof HighwoodError || error.name === 'HighwoodError';
 }
 
 const createApp = async (
@@ -40,6 +45,14 @@ const createApp = async (
           message: issue.message,
           code: issue.code,
         })),
+      });
+    }
+
+    if (isHighwoodError(error)) {
+      return reply.status(error.statusCode).send({
+        statusCode: error.statusCode,
+        error: error.stack,
+        message: error.message,
       });
     }
 
