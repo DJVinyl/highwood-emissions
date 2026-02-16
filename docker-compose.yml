@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: highwood_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-emissions}
+      POSTGRES_USER: ${POSTGRES_USER:-emissions}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-emissions}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - emissions_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://emissions:emissions@db:5432/emissions
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npm run db:migrate && npm run db:seed"
+    networks:
+      - app-network
+    restart: "no"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: sh -c "npm run db:migrate && npm run db:seed"
+    container_name: highwood-backend
+    restart: always
+    environment:
+      DATABASE_URL: postgres://emissions:emissions@postgres:5432/emissions
+      PORT: 4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: highwood-frontend
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+      - API_URL=http://backend:4000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  emissions_pg_data:
+
+networks:
+  app-network:
+    driver: bridge

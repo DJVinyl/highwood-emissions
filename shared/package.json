@@ -4,9 +4,15 @@
   "description": "",
   "keywords": [],
   "author": "",
-  "main": "./zod/schema/index.ts",
-  "types": "./zod/schema/index.ts",
+  "main": "./build/index.js",
+  "types": "./build/index.js",
   "peerDependencies": {
     "zod": "^4.3.6"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
   }
 }

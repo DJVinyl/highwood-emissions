@@ -2,7 +2,14 @@ import { Site, CreateMeasurement, SiteMetrics, SiteType, Coordinate } from '@hig
 
 import { ApiResponse } from '../types/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000';
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000';
+
+export const getBaseUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  }
+  return process.env.API_URL || 'http://backend:3000';
+};
 
 class ApiClient {
   private baseUrl: string;
@@ -79,4 +86,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(API_BASE_URL);
+export const apiClient = new ApiClient(getBaseUrl());

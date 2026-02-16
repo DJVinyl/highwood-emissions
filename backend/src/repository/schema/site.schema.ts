@@ -1,10 +1,7 @@
-import { pgTable, uuid, varchar, jsonb, timestamp, real, boolean, pgEnum, check } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, jsonb, timestamp, real, boolean, pgEnum } from 'drizzle-orm/pg-core';
 import { Coordinate, SiteType } from '@highwood/shared';
 
-import { enumToPgEnum } from '../../lib/enum-to-pg-enum';
-import { sql } from 'drizzle-orm';
-
-const siteType = pgEnum('site_type', enumToPgEnum(SiteType));
+const siteType = pgEnum('site_type', [SiteType.WELL, SiteType.PROCESSING_PLANT, SiteType.REFINERY]);
 
 const sitesTable = pgTable('sites', {
   id: uuid('id').defaultRandom().primaryKey(),

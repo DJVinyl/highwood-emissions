@@ -1,13 +1,10 @@
 import { pgTable, uuid, timestamp, real, index } from 'drizzle-orm/pg-core';
-import { sitesTable } from './site.schema';
 
 const measurementTable = pgTable(
   'measurements',
   {
     id: uuid('id').defaultRandom().primaryKey(),
-    siteId: uuid('site_id')
-      .notNull()
-      .references(() => sitesTable.id),
+    siteId: uuid('site_id').notNull(),
     reading: real('reading').notNull(),
     takenAt: timestamp('taken_at').notNull(),
 

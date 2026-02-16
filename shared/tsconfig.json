@@ -5,8 +5,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./build",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "sourceMap": true,
     "useUnknownInCatchVariables": false,
     "strict": true,
@@ -15,11 +13,7 @@
     "skipDefaultLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "typeRoots": ["src/types", "node_modules/@types"],
-    "paths": {
-      "*": ["*", "node_modules/*", "src/*", "test/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/**/*", "scripts/**/*"]
+  "include": ["zod/**/*"]
 }
