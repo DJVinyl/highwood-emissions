@@ -41,3 +41,17 @@ Backend: http://localhost:4000"
 ```
 
 Enjoy!
+
+2. Optional: Once you've enjoyed the platform
+
+```bash
+./reinstall
+```
+
+to enjoy it again.
+
+3. Once your done for real:
+
+```bash
+./uninstall
+```
