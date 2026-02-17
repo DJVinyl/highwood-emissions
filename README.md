@@ -21,7 +21,7 @@ This project is a real-time Emissions Ingestion and Analytics Engine. It has a h
 
 # Architecture
 
-Please refer to **Architecture.md** for more information on the system, what decisions were made and what tasks were completed.
+Please refer to **Architecture.md** for more information on the system, what decisions were made, and what tasks were completed.
 
 # Getting Started (Local development)
 
