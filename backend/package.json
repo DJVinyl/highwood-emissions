@@ -9,8 +9,9 @@
     "yarn": "USE NPM"
   },
   "scripts": {
+    "prebuild": "cd ../shared && npm run build",
     "build": "tsc -p tsconfig.json",
-    "start:production": "NODE_ENV=production ts-node-dev --no-notify --inspect=:9225 src/server.ts",
+    "start:production": "NODE_ENV=production node build/src/server.js",
     "start:local": "NODE_ENV=local ts-node-dev --no-notify --inspect=:9225 src/server.ts",
     "test": "NODE_ENV=test jest --passWithNoTests",
     "db:migrate": "node build/scripts/migrate-db.js",

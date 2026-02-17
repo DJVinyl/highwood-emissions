@@ -12,8 +12,6 @@ export class IngestController {
 
   public async ingest(request: FastifyRequest) {
     logger.info({ measurements: request.body }, 'IngestController.ingest');
-    logger.info({ date: new Date() }, 'time');
-    return false;
 
     const measurementsWithDates = (request.body as Measurement[]).map((measurement) => {
       return {

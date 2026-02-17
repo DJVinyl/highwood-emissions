@@ -5,7 +5,7 @@ import createApp from './app';
 import { DependencyRegistry } from './configuration/dependency-registry';
 import { createPostGresDataSource } from './configuration/database';
 
-const PORT = process.env.NODE_ENV === 'production' ? 8080 : 4000;
+const PORT = 4000;
 
 (async () => {
   dotenvConfig();

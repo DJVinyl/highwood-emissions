@@ -7,9 +7,15 @@ WORKDIR /app
 # Copy root package files if using workspaces
 COPY package*.json ./
 COPY backend/package*.json ./backend/
+COPY shared/packages*.json ./shared/
 
 # Copy shared folder (needed for types)
 COPY shared ./shared/
+
+WORKDIR /app/shared
+RUN npm ci && \
+    npm run build && \
+    npm cache clean --force
 
 # Install ALL dependencies (including devDependencies)
 WORKDIR /app/backend
@@ -19,7 +25,6 @@ RUN npm ci && \
 # Copy backend application
 COPY backend .
 
-# Build TypeScript
 RUN npm run build
 
 # Production stage
@@ -31,9 +36,15 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 COPY backend/package*.json ./backend/
+COPY shared/package*.json ./shared/
 
 # Copy shared folder
-COPY shared ./shared/
+COPY --from=builder /app/shared/build ./shared/build
+COPY shared/package.json ./shared/
+
+WORKDIR /app/shared
+RUN npm ci --only=production && \
+    npm cache clean --force
 
 # Install only production dependencies
 WORKDIR /app/backend
@@ -45,6 +56,9 @@ COPY --from=builder /app/backend/build ./build
 
 # Copy drizzle folder for migrations and seeds
 COPY backend/drizzle ./drizzle
+
+COPY backend/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 # Expose the port your app runs on (adjust as needed)
 EXPOSE 4000

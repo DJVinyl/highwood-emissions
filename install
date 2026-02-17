@@ -1,2 +1,55 @@
 #!/bin/bash
+set -e
+
+echo "====================================="
+echo "Starting application server"
+echo "====================================="
+echo ""
+
 docker compose -p highwood up --build -d
+
+echo "Waiting for backend to initialize"
+echo "Including Migrations and seeding"
+sleep 5
+
+MAX_RETRIES=30
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    if docker logs highwood-backend 2>&1 | grep -q "Starting application server"; then
+        echo "Backend Initialization complete"
+        break
+    fi
+
+    if docker logs highwood-backend 2>&1 | grep -q "Migration failed\|Seeding failed"; then
+        echo "backend initialization failed. Logs:"
+        docker logs highwood-backend
+        exit 1
+    fi
+
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    sleep 2
+    echo "Still initializing ($RETRY_COUNT/$MAX_RETRIES)"
+done
+
+if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+    echo "Timeout waiting for backend. Logs:"
+    docker logs highwood-backend
+    exit 1
+fi
+
+echo ""
+echo "====================================="
+echo "Services Status"
+echo "====================================="
+docker compose -p highwood ps
+
+echo ""
+echo "====================================="
+echo "Installation complete"
+echo "====================================="
+echo "Available services:"
+echo "    - Frontend: http://localhost:3000"
+echo "    - Backend: http://localhost:4000"
+echo "    - Postgres: localhost:5432"
+

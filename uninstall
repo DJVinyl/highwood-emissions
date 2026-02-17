@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+echo "====================================="
+echo "Highwood Docker Uninstall"
+echo "====================================="
+echo ""
+
+if docker compose -p highwood ps --quiet 2>/dev/null | grep -q .; then
+    echo ""
+    echo "Stopping and removing containers"
+    docker compose -p highwood down
+    echo "Services stopped and removed"
+else
+    echo "No running service founds"
+fi
+
+
+echo ""
+read -p "Do you want to remove volumes (includes: database data) [y/N]" -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "Removing Volumes"
+    docker compose -p highwood down -v
+    echo "Volumes Removed"
+fi
+
+echo "====================================="
+echo "Highwood Docker Uninstall Complete"
+echo "====================================="

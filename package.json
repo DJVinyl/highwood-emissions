@@ -8,6 +8,14 @@
     "frontend",
     "shared"
   ],
+  "scripts": {
+    "build": "npm run build --workspace=shared && npm run build --workspace=backend",
+    "build:shared": "npm run build --workspace=shared",
+    "build:backend": "npm run build:shared && npm run build --workspace=backend",
+    "build:frontend": "npm run build:shared && npm run build --workspace=frontend",
+    "start:backend": "npm run start:production --workspace=backend",
+    "start:frontend": "npm run dev --workspace=frontend"
+  },
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",

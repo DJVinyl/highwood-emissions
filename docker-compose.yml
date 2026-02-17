@@ -17,36 +17,24 @@ services:
       timeout: 3s
       retries: 20
 
-  migrate:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://emissions:emissions@db:5432/emissions
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: sh -c "npm run db:migrate && npm run db:seed"
-    networks:
-      - app-network
-    restart: "no"
-
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    command: sh -c "npm run db:migrate && npm run db:seed"
     container_name: highwood-backend
     restart: always
     environment:
-      DATABASE_URL: postgres://emissions:emissions@postgres:5432/emissions
+      DATABASE_URL: postgresql://emissions:emissions@postgres:5432/emissions
+      NODE_ENV: production
       PORT: 4000
     ports:
       - "4000:4000"
+    volumes:
+      - backend_data:/tmp
     depends_on:
       postgres:
         condition: service_healthy
+    entrypoint: ["/app/backend/entrypoint.sh"]
 
   frontend:
     build:
@@ -64,7 +52,4 @@ services:
 
 volumes:
   emissions_pg_data:
-
-networks:
-  app-network:
-    driver: bridge
+  backend_data:
