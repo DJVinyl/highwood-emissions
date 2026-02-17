@@ -1,1 +1,1 @@
-Time permitting: Create a psql docker container so repositories can be tested
+Time permitting: Create a test psql docker container so repositories can be tested
